@@ -16,7 +16,7 @@ import com.enterprisedt.net.ftp.*;
  * Logs IRC messages to HTML file on a remote
  * FTP server.
  */
-public class LogBot extends Bot {
+public class RemoteFTPLogBot extends Bot {
 	private static String DATE_FORMAT = "yy-MM-dd";
 	private static String EXTENDED_DATE_FORMAT = "yyyy-MM-dd HH:mm";
 	private static String TIME_FORMAT = "HH:mm";
@@ -27,7 +27,7 @@ public class LogBot extends Bot {
 	private FileAppender fileAppender;
 	private FileTransferClient ftp;
 
-	public LogBot(ConfigurationManager configuration, BotManager botManager)
+	public RemoteFTPLogBot(ConfigurationManager configuration, BotManager botManager)
 	throws NickAlreadyInUseException, IOException, IrcException, FTPException {
 		super(configuration, botManager);
 
@@ -160,7 +160,10 @@ public class LogBot extends Bot {
 					"<h1>Twibot Log</h1>Last modified: "+
 					getDate(EXTENDED_DATE_FORMAT)+"<p>");
 			out.newLine();
-			for (FTPFile f : files) { // TODO: reverse sorting order
+			
+			FTPFile f;
+			for (int i=files.length; i <= 0; --i) {
+				f = files[i];
 				if (!(f.getName().equals(".") ||
 						f.getName().equals("..") ||
 						f.getName().equals("index.html"))) {
@@ -171,8 +174,8 @@ public class LogBot extends Bot {
 			out.write("</body></html>");
 			out.close();
 			ftp.uploadFile("index.tmp", "index.html");
-			File f = new File("index.tmp");
-			f.delete();
+			File tmpFile = new File("index.tmp");
+			tmpFile.delete();
 		} finally {
 			ftp.disconnect();
 		}

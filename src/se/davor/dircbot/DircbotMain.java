@@ -7,6 +7,6 @@ public class DircbotMain {
 		ConfigurationManager configuration = new ConfigurationManager();
 		BotManager botManager = new BotManager(configuration);
 		botManager.add(new XMPPBot(configuration, botManager));
-		botManager.add(new LogBot(configuration, botManager));
+		botManager.add(new RemoteFTPLogBot(configuration, botManager));
 	}
 }
