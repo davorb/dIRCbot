@@ -15,6 +15,7 @@ import org.jivesoftware.smack.packet.Message;
  */
 public class XMPPBot extends Bot {
 	XMPPConnection xmppConnection;
+	BotManager botManager;
 	Chat chat;
 
 	private boolean forwardMessages;
@@ -31,13 +32,14 @@ public class XMPPBot extends Bot {
 		xmppConnection.connect();
 		try{
 			xmppConnection.login(configuration.getKey("XMPPUSER"), 
-			configuration.getKey("XMPPPW"));
+					configuration.getKey("XMPPPW"));
 		} catch (NoSuchElementException e) {
 			System.out.println("Missing vital information from configuration file.");
 			System.exit(1);
 		}
 		chat = xmppConnection.getChatManager().createChat("davor@davor.se", new MessageParrot());
 		forwardMessages=true;
+		this.botManager = botManager;
 	}
 
 	/**
@@ -62,7 +64,7 @@ public class XMPPBot extends Bot {
 			}
 		}
 	}
-	
+
 	private Bot getThis() {
 		return this;
 	}
@@ -102,6 +104,18 @@ public class XMPPBot extends Bot {
 						chat.sendMessage(userList);
 					} catch (XMPPException e) {
 						System.out.println("Failed to send xmpp message");
+					}
+				} else if (message.getBody().equalsIgnoreCase("RECONNECT")) { 
+					try {
+						botManager.reconnect();
+					} catch (Exception e) {
+						e.printStackTrace();
+						try {
+							chat.sendMessage(e.toString());
+						} catch (XMPPException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 				} else {
 					botManager.sendMessage(message.getBody(), getThis());

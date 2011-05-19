@@ -6,6 +6,11 @@ import java.util.NoSuchElementException;
 
 import org.jibble.pircbot.*;
 
+/**
+ * This is the actual IRC-client
+ * @author Davor
+ *
+ */
 public class BotManager extends PircBot {
 	protected ConfigurationManager configuration;
 	private ArrayList<Bot> bots;
@@ -19,7 +24,7 @@ public class BotManager extends PircBot {
 		this.configuration = configuration;
 		this.bots = new ArrayList<Bot>();
 		setAutoNickChange(true); 
-		
+
 		try {
 			setVerbose(Boolean.parseBoolean(configuration.getKey("DEBUG"))); // debugging	
 			connect(configuration.getKey("SERVER"));
@@ -29,7 +34,7 @@ public class BotManager extends PircBot {
 			System.exit(1);
 		}
 	}
-	
+
 	public String getChannel() {
 		return channel;
 	}
@@ -41,7 +46,7 @@ public class BotManager extends PircBot {
 	public void remove(Bot bot) {
 		bots.remove(bot);
 	}
-	
+
 	protected void onDisconnect() {
 		try {
 			reconnect();
@@ -49,39 +54,57 @@ public class BotManager extends PircBot {
 			e.printStackTrace();
 		}
 	}
-	
+
 	protected void onJoin(String channel, String sender, String login, String hostname) {
 		for (Bot bot : bots) {
 			bot.onJoin(channel, sender, login, hostname);
 		}
 	}
-	
+
 	protected void onPart(String channel, String sender,
-            String login, String hostname) {
+			String login, String hostname) {
 		for (Bot bot : bots) {
 			bot.onPart(channel, sender, login, hostname);
 		}
+
+		/* Quick hack: Ideally, I would do this periodically.
+		 * This might have to be placed somewhere else. The
+		 * goal of this is for the bot to figure out that
+		 * he isn't supposed to be alone in the channel.
+		 * 
+		 * TODO: Add option for this under settings. This WILL
+		 * cause problems for people outside QNET
+		 */
+		if (getUsers(channel).length == 0) {
+			try {
+				Thread.sleep(1000);
+				reconnect();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
-	
+
 	protected void onQuit(String sourceNick,
-            String sourceLogin,
-            String sourceHostname,
-            String reason) {
+			String sourceLogin,
+			String sourceHostname,
+			String reason) {
 		for (Bot bot : bots) {
 			bot.onQuit(sourceNick, sourceLogin, sourceHostname, reason);
 		}
 	}
-	
+
 	protected void onPrivateMessage(String sender, String login, 
 			String hostname, String message) {
 		for (Bot bot : bots) {
 			bot.onPrivateMessage(sender, login, hostname, message);
 		}
 	}
-	
+
 	public void sendMessage(String message, Bot senderBot) {
 		super.sendMessage(configuration.getKey("CHANNEL"), message);
-		
+
 		for (Bot bot : bots) {
 			if (!bot.equals(senderBot)) {
 				bot.onMessage(null, this.getNick(), null, null, message);
