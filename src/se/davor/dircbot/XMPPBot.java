@@ -107,6 +107,17 @@ public class XMPPBot extends Bot {
 					}
 				} else if (message.getBody().equalsIgnoreCase("RECONNECT")) { 
 					try {
+						botManager.disconnect();
+					} catch (Exception e) {
+						e.printStackTrace();
+						try {
+							chat.sendMessage(e.toString());
+						} catch (XMPPException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+					try {
 						botManager.reconnect();
 					} catch (Exception e) {
 						e.printStackTrace();

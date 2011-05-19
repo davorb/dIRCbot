@@ -128,7 +128,6 @@ public class LogBot extends Bot {
 			ftp.connect();
 			//ftp.changeDirectory(REMOTE_DIRECTORY);
 			ftp.uploadFile(fileName, fileName);
-			ftp.disconnect();
 		} catch (FTPException e) {
 			System.out.println(e.toString());
 		} catch (Exception e) {
