@@ -176,8 +176,9 @@ public class RemoteFTPLogBot extends Bot {
 			ftp.uploadFile("index.tmp", "index.html");
 			File tmpFile = new File("index.tmp");
 			tmpFile.delete();
-		} finally {
 			ftp.disconnect();
+		} catch (FTPException e) {
+			System.err.println(e.toString());
 		}
 	}
 
