@@ -52,6 +52,17 @@ These are some of the settings you might want to change:
 
 After that type this to run the program:
     java -jar dircbot.jar
+    
+    
+Required libraries
+------------------
+The following libraries are required to be able to compile the source code:
+
+  - log4j
+  - edtFTPj
+  - pircbot
+  - smack
+  - twitter4j
 
 Contact
 -------
