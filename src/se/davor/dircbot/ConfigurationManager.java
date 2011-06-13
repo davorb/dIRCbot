@@ -25,4 +25,13 @@ public class ConfigurationManager {
 		else
 			throw new NoSuchElementException();
 	}
+	
+	/**
+	 * Checks that the key is true. If it is, returns
+	 * true. Otherwise returns false. If the key doesn't
+	 * exist, returns false.
+	 */
+	public boolean isTrue(String key) {
+		return properties.containsKey(key);
+	}
 }

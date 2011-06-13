@@ -39,6 +39,8 @@ Installation
 Create a file called "settings.conf" in the same directory as your jar file.
 These are some of the settings you might want to change:
 
+    xmppbot=true
+    remoteftpbot=true
     SERVER=se.quakenet.org
     CHANNEL=#mychannel
     DEBUG=true
@@ -49,6 +51,9 @@ These are some of the settings you might want to change:
     FTPHOST=myhost.com
     FTPUSER=myuser
     FTPPW=password
+
+To disable one of the bots, like the XMPP-bot or the remote ftp bot, set
+it's options to false.
 
 After that type this to run the program:
     java -jar dircbot.jar
