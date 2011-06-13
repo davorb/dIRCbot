@@ -64,7 +64,7 @@ public class RemoteFTPLogBot extends Bot {
 					System.exit(1);
 				}
 				currentDate = getDate();
-				fileAppender = new FileAppender(new SimplifiedHTMLLayout(), currentDate+".html");
+				fileAppender = new FileAppender(new HTMLLayout(), currentDate+".html");
 				logger.addAppender(fileAppender);
 			} catch (IOException e) {
 				System.out.println(e.toString());
