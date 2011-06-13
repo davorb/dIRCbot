@@ -50,6 +50,9 @@ These are some of the settings you might want to change:
     FTPUSER=myuser
     FTPPW=password
 
-After that type "java -jar dircbot.jar" to run the program.
-===========================================================================
+After that type this to run the program:
+    java -jar dircbot.jar
+
+Contact
+-------
 If there's anything else, feed free to contact me @ davor @ davor.se
