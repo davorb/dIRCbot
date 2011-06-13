@@ -17,7 +17,7 @@ restart the server remotely (and do a couple of other things as well).
 Logs everything that is said in the channel and then uploads it to a remote
 FTP-server.
 
-  - TwitterBot
+  - TwitterBot (has been disabled for now)
 Tweets everything that is said in the channel.
 
 Please note
