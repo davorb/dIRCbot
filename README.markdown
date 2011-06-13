@@ -26,10 +26,6 @@ The bot is in quite an early stage at this point. The TwitterBot stopped
 working after Twitter changed how they require you to authenticate and I
 will have to get around to fix that eventually.
 
-Also, right now, you have to "manually" add your bots to DircbotMain.java
-if you want to disable/enable any bots besides the default one. I will
-get around to fixing this eventually as well.
-
 If you decide to write your own bot, it might be a good idea to keep in
 mind that I haven't added multithreading yet (comming soon!). So if one
 bot is really really slow, it's going to slow down the other bots.
