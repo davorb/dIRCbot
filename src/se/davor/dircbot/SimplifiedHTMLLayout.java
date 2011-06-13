@@ -26,7 +26,7 @@ public class SimplifiedHTMLLayout extends Layout {
 		sbuf.append("<title>" + title + "</title>" + Layout.LINE_SEP);
 		sbuf.append("<style type=\"text/css\">"  + Layout.LINE_SEP);
 		sbuf.append("<!--"  + Layout.LINE_SEP);
-		sbuf.append("body, table {font-family: arial,sans-serif; font-size: x-small;}" + Layout.LINE_SEP);
+		sbuf.append("body, table {font-family: arial,sans-serif; font-size: medium;}" + Layout.LINE_SEP);
 		sbuf.append("th {background: #336699; color: #FFFFFF; text-align: left;}" + Layout.LINE_SEP);
 		sbuf.append("-->" + Layout.LINE_SEP);
 		sbuf.append("</style>" + Layout.LINE_SEP);
@@ -105,14 +105,14 @@ public class SimplifiedHTMLLayout extends Layout {
 		sbuf.append("</tr>" + Layout.LINE_SEP);
 
 		if (event.getNDC() != null) {
-			sbuf.append("<tr><td bgcolor=\"#EEEEEE\" style=\"font-size : xx-small;\" colspan=\"6\" title=\"Nested Diagnostic Context\">");
+			sbuf.append("<tr><td bgcolor=\"#EEEEEE\" style=\"font-size : medium;\" colspan=\"6\" title=\"Nested Diagnostic Context\">");
 			sbuf.append("NDC: " + Transform.escapeTags(event.getNDC()));
 			sbuf.append("</td></tr>" + Layout.LINE_SEP);
 		}
 
 		String[] s = event.getThrowableStrRep();
 		if(s != null) {
-			sbuf.append("<tr><td bgcolor=\"#993300\" style=\"color:White; font-size : xx-small;\" colspan=\"6\">");
+			sbuf.append("<tr><td bgcolor=\"#993300\" style=\"color:White; font-size : medium;\" colspan=\"6\">");
 			appendThrowableAsHTML(s, sbuf);
 			sbuf.append("</td></tr>" + Layout.LINE_SEP);
 		}
@@ -149,7 +149,7 @@ public class SimplifiedHTMLLayout extends Layout {
 		sbuf.append("<title>" + title + "</title>" + Layout.LINE_SEP);
 		sbuf.append("<style type=\"text/css\">"  + Layout.LINE_SEP);
 		sbuf.append("<!--"  + Layout.LINE_SEP);
-		sbuf.append("body, table {font-family: arial,sans-serif; font-size: x-small;}" + Layout.LINE_SEP);
+		sbuf.append("body, table {font-family: arial,sans-serif; font-size: medium;}" + Layout.LINE_SEP);
 		sbuf.append("th {background: #336699; color: #FFFFFF; text-align: left;}" + Layout.LINE_SEP);
 		sbuf.append("-->" + Layout.LINE_SEP);
 		sbuf.append("</style>" + Layout.LINE_SEP);
