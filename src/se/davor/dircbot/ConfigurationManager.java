@@ -32,6 +32,11 @@ public class ConfigurationManager {
 	 * exist, returns false.
 	 */
 	public boolean isTrue(String key) {
-		return properties.containsKey(key);
+		try {
+			boolean b = new Boolean(getKey(key));
+			return b;
+		} catch (NoSuchElementException e) {
+			return false;
+		}
 	}
 }
