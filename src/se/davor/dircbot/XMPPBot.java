@@ -76,6 +76,7 @@ public class XMPPBot extends Bot {
 		private Message msg;
 
 		MessageParrot() {
+			// TODO: Need to add this to config file
 			msg = new Message("davor@davor.se", Message.Type.chat);
 		}
 
@@ -88,7 +89,7 @@ public class XMPPBot extends Bot {
 					forwardMessages=true;
 				} else if (message.getBody().equalsIgnoreCase("STATUS")) {
 					try {
-						chat.sendMessage("Commands are 'USERS', 'STARTFW' and 'STOPFW'."+
+						chat.sendMessage("Commands are 'USERS', 'RECONNECT', 'STARTFW' and 'STOPFW'."+
 								"Forwarding is set to "+forwardMessages+".");
 					} catch (XMPPException e) {
 						System.out.println("Failed to send xmpp message");
@@ -113,18 +114,6 @@ public class XMPPBot extends Bot {
 						try {
 							chat.sendMessage(e.toString());
 						} catch (XMPPException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-					}
-					try {
-						botManager.reconnect();
-					} catch (Exception e) {
-						e.printStackTrace();
-						try {
-							chat.sendMessage(e.toString());
-						} catch (XMPPException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 					}

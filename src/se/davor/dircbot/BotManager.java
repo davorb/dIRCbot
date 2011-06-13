@@ -49,7 +49,9 @@ public class BotManager extends PircBot {
 
 	protected void onDisconnect() {
 		try {
+			Thread.sleep(1000);
 			reconnect();
+			joinChannel(channel);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -84,6 +86,16 @@ public class BotManager extends PircBot {
 				e.printStackTrace();
 			}
 		}
+		
+		/* Above might not to be working. Adding following
+		 * to be check if it calls onPart when a netsplit
+		 * occurs.
+		 * 
+		 * Although I think it's been fixed with the recent
+		 * changes made to the BotManager class to make the
+		 * RECONNECT command in the XMPPBot work.
+		 */
+		System.out.println(sender+" parted.");
 	}
 
 	protected void onQuit(String sourceNick,
