@@ -21,10 +21,15 @@ FTP-server.
 Tweets everything that is said in the channel.
 
 Supports the following options:
+
   - XMPPSERVER
+  
   - XMPPPORT
+  
   - XMPPUSER
+  
   - XMPPPW
+  
   - (optional) XMPPIGNORESENDER a sender to ignore forwarding messages from (like yourself)
 
 Please note
