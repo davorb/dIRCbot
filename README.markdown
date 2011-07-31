@@ -8,17 +8,24 @@ All of them will most likely not fit everybody, but fortunately it's easy
 to disable the ones that you don't need. Essentially this is an IRC-bot
 with the following functionality:
 
-  - XMPPBot
+## XMPPBot
 Relays everything that is said in the channel to an 
 XMPP/Jabber/Gtalk-account. Also relays private messages and allows you to
 restart the server remotely (and do a couple of other things as well).
 
-  - RemoteFTPLogBot
+## RemoteFTPLogBot
 Logs everything that is said in the channel and then uploads it to a remote
 FTP-server.
 
-  - TwitterBot (has been disabled for now)
+## TwitterBot (has been disabled for now)
 Tweets everything that is said in the channel.
+
+Supports the following options:
+  - XMPPSERVER
+  - XMPPPORT
+  - XMPPUSER
+  - XMPPPW
+  - (optional) XMPPIGNORESENDER a sender to ignore forwarding messages from (like yourself)
 
 Please note
 -----------
@@ -49,7 +56,7 @@ These are some of the settings you might want to change:
     FTPPW=password
 
 To disable one of the bots, like the XMPP-bot or the remote ftp bot, set
-it's options to false.
+it's options to false or don't write it out in the first place.
 
 After that type this to run the program:
     java -jar dircbot.jar

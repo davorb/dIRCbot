@@ -14,10 +14,11 @@ import org.jivesoftware.smack.packet.Message;
  * and incomming XMPP messages back to IRC.
  */
 public class XMPPBot extends Bot {
-	XMPPConnection xmppConnection;
-	BotManager botManager;
-	Chat chat;
-
+	private XMPPConnection xmppConnection;
+	private BotManager botManager;
+	private Chat chat;
+	private String ignoreSender;
+	
 	private boolean forwardMessages;
 
 	public XMPPBot(ConfigurationManager configuration, BotManager botManager)
@@ -40,6 +41,12 @@ public class XMPPBot extends Bot {
 		chat = xmppConnection.getChatManager().createChat("davor@davor.se", new MessageParrot());
 		forwardMessages=true;
 		this.botManager = botManager;
+		
+		try {
+			ignoreSender = configuration.getKey("XMPPIGNORESENDER");
+		} catch (NoSuchElementException e) {
+			ignoreSender = "";
+		}
 	}
 
 	/**
@@ -55,7 +62,7 @@ public class XMPPBot extends Bot {
 			"I log everything that is being said in this channel and post it to twitter.");
 		} else {
 			try {
-				if (forwardMessages)
+				if (forwardMessages && !sender.equals(ignoreSender))
 					chat.sendMessage("<"+sender+"> "+message);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
