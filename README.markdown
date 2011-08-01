@@ -30,7 +30,7 @@ Supports the following options:
   
   - XMPPPW
   
-  - (optional) XMPPIGNORESENDER a sender to ignore forwarding messages from (like yourself)
+  - (optional) XMPPTRUSTEDSENDER Ignores messages from this sender and allows you to send certain commands.
 
 Please note
 -----------

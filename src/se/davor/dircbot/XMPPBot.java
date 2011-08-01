@@ -17,7 +17,7 @@ public class XMPPBot extends Bot {
 	private XMPPConnection xmppConnection;
 	private BotManager botManager;
 	private Chat chat;
-	private String ignoreSender;
+	private String trustedSender;
 	
 	private boolean forwardMessages;
 
@@ -43,9 +43,9 @@ public class XMPPBot extends Bot {
 		this.botManager = botManager;
 		
 		try {
-			ignoreSender = configuration.getKey("XMPPIGNORESENDER");
+			trustedSender = configuration.getKey("XMPPIGNORESENDER");
 		} catch (NoSuchElementException e) {
-			ignoreSender = "";
+			trustedSender = "";
 		}
 	}
 
@@ -60,9 +60,15 @@ public class XMPPBot extends Bot {
 		} else if (message.equalsIgnoreCase("!help")) {
 			botManager.sendMessage(channel, sender + ": I am twibot. " + 
 			"I log everything that is being said in this channel and post it to twitter.");
+		} else if (message.equalsIgnoreCase("!stop") && sender.equals(trustedSender)) {
+			forwardMessages = false;
+			botManager.sendMessage(channel, "Stopped forwarding messages.");
+		} else if (message.equalsIgnoreCase("!start") && sender.equals(trustedSender)) {
+			forwardMessages = true;
+			botManager.sendMessage(channel, "Resumed forwarding messages.");
 		} else {
 			try {
-				if (forwardMessages && !sender.equals(ignoreSender))
+				if (forwardMessages && !sender.equals(trustedSender))
 					chat.sendMessage("<"+sender+"> "+message);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
