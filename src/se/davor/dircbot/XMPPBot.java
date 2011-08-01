@@ -43,7 +43,7 @@ public class XMPPBot extends Bot {
 		this.botManager = botManager;
 		
 		try {
-			trustedSender = configuration.getKey("XMPPIGNORESENDER");
+			trustedSender = configuration.getKey("XMPPTRUSTEDSENDER");
 		} catch (NoSuchElementException e) {
 			trustedSender = "";
 		}
