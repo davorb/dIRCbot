@@ -25,7 +25,7 @@ Tweets everything that is said in the channel.
 
 Supports the following options:
 
-  - XMPPSERVER
+  - XMPPSERVER (true/false) Enables/disables the XMPP-bot. Will default to false if this key doesn't exist. None of the other values are necessary if the module is turned off.
   
   - XMPPPORT
   
