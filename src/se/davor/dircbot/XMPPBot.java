@@ -35,7 +35,7 @@ public class XMPPBot extends Bot {
 			xmppConnection.login(configuration.getKey("XMPPUSER"), 
 					configuration.getKey("XMPPPW"));
 		} catch (NoSuchElementException e) {
-			System.out.println("Missing vital information from configuration file.");
+			System.err.println("Missing vital information from configuration file.");
 			System.exit(1);
 		}
 		chat = xmppConnection.getChatManager().createChat("davor@davor.se", new MessageParrot());
@@ -72,7 +72,7 @@ public class XMPPBot extends Bot {
 					chat.sendMessage("<"+sender+"> "+message);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				System.out.println("Unable to send tweet.");
+				System.err.println("Unable to send XMPP message.");
 				e.printStackTrace();
 			}
 		}
@@ -105,7 +105,7 @@ public class XMPPBot extends Bot {
 						chat.sendMessage("Commands are 'USERS', 'RECONNECT', 'START' and 'STOP'."+
 								"Forwarding is set to "+forwardMessages+".");
 					} catch (XMPPException e) {
-						System.out.println("Failed to send xmpp message");
+						System.err.println("Failed to send xmpp message");
 					}
 				} else if (message.getBody().equalsIgnoreCase("USERS")) {
 					try {
@@ -117,7 +117,7 @@ public class XMPPBot extends Bot {
 						}
 						chat.sendMessage(userList);
 					} catch (XMPPException e) {
-						System.out.println("Failed to send xmpp message");
+						System.err.println("Failed to send xmpp message");
 					}
 				} else if (message.getBody().equalsIgnoreCase("RECONNECT")) { 
 					try {
@@ -134,7 +134,7 @@ public class XMPPBot extends Bot {
 					botManager.sendMessage(message.getBody(), getThis());
 				}
 			} else {
-				System.out.println("I got a message I didn''t understand");
+				System.err.println("Received message that is hard to understand");
 			}
 		}
 	}
