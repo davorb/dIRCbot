@@ -96,13 +96,13 @@ public class XMPPBot extends Bot {
 		public void processMessage(Chat chat, Message message) {
 			if(message.getType().equals(Message.Type.chat) && message.getBody() != null) {
 				System.out.println("Received: " + message.getBody());
-				if (message.getBody().equalsIgnoreCase("STOPFW")) {
+				if (message.getBody().equalsIgnoreCase("STOP")) {
 					forwardMessages=false;
-				} else if (message.getBody().equalsIgnoreCase("STARTFW")) {
+				} else if (message.getBody().equalsIgnoreCase("START")) {
 					forwardMessages=true;
 				} else if (message.getBody().equalsIgnoreCase("STATUS")) {
 					try {
-						chat.sendMessage("Commands are 'USERS', 'RECONNECT', 'STARTFW' and 'STOPFW'."+
+						chat.sendMessage("Commands are 'USERS', 'RECONNECT', 'START' and 'STOP'."+
 								"Forwarding is set to "+forwardMessages+".");
 					} catch (XMPPException e) {
 						System.out.println("Failed to send xmpp message");
