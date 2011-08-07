@@ -20,7 +20,7 @@ FTP-server.
 ## TwitterBot (has been disabled for now)
 Tweets everything that is said in the channel.
 
-Supports the following options:
+Supports the following options in the config file:
 
   - XMPPSERVER
   
