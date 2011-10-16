@@ -17,8 +17,8 @@ public class XMPPBot extends Bot {
 	private XMPPConnection xmppConnection;
 	private BotManager botManager;
 	private Chat chat;
-	private String trustedSender;
-	
+	private String trustedSender, receiver;
+
 	private boolean forwardMessages;
 
 	public XMPPBot(ConfigurationManager configuration, BotManager botManager)
@@ -34,14 +34,15 @@ public class XMPPBot extends Bot {
 		try{
 			xmppConnection.login(configuration.getKey("XMPPUSER"), 
 					configuration.getKey("XMPPPW"));
+			receiver = configuration.getKey("XMPPRECEIVER");
 		} catch (NoSuchElementException e) {
 			System.err.println("Missing vital information from configuration file.");
 			System.exit(1);
 		}
-		chat = xmppConnection.getChatManager().createChat("davor@davor.se", new MessageParrot());
+		chat = xmppConnection.getChatManager().createChat(receiver, new MessageParrot());
 		forwardMessages=true;
 		this.botManager = botManager;
-		
+
 		try {
 			trustedSender = configuration.getKey("XMPPTRUSTEDSENDER");
 		} catch (NoSuchElementException e) {
@@ -60,18 +61,17 @@ public class XMPPBot extends Bot {
 		} else if (message.equalsIgnoreCase("!help")) {
 			botManager.sendMessage(channel, sender + ": I am twibot. " + 
 			"I log everything that is being said in this channel and post it to twitter.");
-		} else if (message.equalsIgnoreCase("!stop") && sender.equals(trustedSender)) {
+		} else if (message.equalsIgnoreCase("!stop") && sender.startsWith(trustedSender)) {
 			forwardMessages = false;
 			botManager.sendMessage(channel, "Stopped forwarding messages.");
-		} else if (message.equalsIgnoreCase("!start") && sender.equals(trustedSender)) {
+		} else if (message.equalsIgnoreCase("!start") && sender.startsWith(trustedSender)) { 
 			forwardMessages = true;
 			botManager.sendMessage(channel, "Resumed forwarding messages.");
 		} else {
 			try {
-				if (forwardMessages && !sender.equals(trustedSender))
+				if (forwardMessages && sender.startsWith(trustedSender))
 					chat.sendMessage("<"+sender+"> "+message);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				System.err.println("Unable to send XMPP message.");
 				e.printStackTrace();
 			}

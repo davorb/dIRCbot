@@ -30,7 +30,9 @@ Supports the following options in the config file:
   
   - XMPPPW
   
-  - (optional) XMPPTRUSTEDSENDER Ignores messages from this sender and allows you to send certain commands.
+  - XMPPRECEIVER The account to send the messages to
+  
+  - (optional) XMPPTRUSTEDSENDER Ignores messages from this senders who's name starts with this and allows you to send certain commands. If the sender is set to "A" then both "Ab" and "Ac" will fall under this category.
 
 Please note
 -----------
