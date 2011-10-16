@@ -3,6 +3,9 @@ dIRCbot
 
 Introduction
 ------------
+The most important function for this bot is to relay messages from an IRC
+server to a Jabber/XMPP client and vice versa.
+
 This is sort of a semi-weird project. It has a bunch of different modules.
 All of them will most likely not fit everybody, but fortunately it's easy
 to disable the ones that you don't need. Essentially this is an IRC-bot
@@ -22,7 +25,7 @@ Tweets everything that is said in the channel.
 
 Supports the following options in the config file:
 
-  - XMPPSERVER
+  - XMPPSERVER (true/false) Enables/disables the XMPP-bot. Will default to false if this key doesn't exist. None of the other values are necessary if the module is turned off.
   
   - XMPPPORT
   
