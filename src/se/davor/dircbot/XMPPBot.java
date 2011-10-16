@@ -69,7 +69,7 @@ public class XMPPBot extends Bot {
 			botManager.sendMessage(channel, "Resumed forwarding messages.");
 		} else {
 			try {
-				if (forwardMessages && sender.startsWith(trustedSender))
+				if (forwardMessages && !sender.startsWith(trustedSender))
 					chat.sendMessage("<"+sender+"> "+message);
 			} catch (Exception e) {
 				System.err.println("Unable to send XMPP message.");
