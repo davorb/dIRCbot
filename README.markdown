@@ -9,14 +9,16 @@ relay private messages.
 
 Installation
 ------------
-Create a file called "settings.conf" in the same directory as your jar file.
+Create a file called `settings.conf` in the same directory as your jar file.
 The easiest thing will most likely be if you base in on the 
 settings.conf.example file that can be found in this repository.
 
 After that type this to run the program:
-    java -jar dircbot.jar
+
+     java -jar dircbot.jar
     
-I suggest that you run this program with [screen](http://www.debian-administration.org/articles/34).
+I suggest that you run this program with 
+[screen](http://www.debian-administration.org/articles/34).
 
 Configuration
 ------------
@@ -35,9 +37,10 @@ Required libraries
 ------------------
 The following libraries are required to be able to compile the source code:
 
-  - pircbot
-  - smack
+  - [pircbot](http://www.jibble.org/pircbot.php)
+  - [smack](http://www.igniterealtime.org/projects/smack/)
 
 Contact
 -------
-If there's anything else, feed free to contact me at davor@davor.se
+If there's anything else, feed free to contact me at 
+[davor@davor.se](mailto:davor@davor.se)
