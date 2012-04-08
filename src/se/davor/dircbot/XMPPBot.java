@@ -18,13 +18,13 @@ public class XMPPBot {
 	private Chat chat;
 	private String trustedSender, receiver;
 	private ConfigurationManager configuration;
-	private BotManager botManager;
+	private IrcBot ircBot;
 	private boolean forwardMessages;
 
-	public XMPPBot(ConfigurationManager configuration, BotManager ircBot)
+	public XMPPBot(ConfigurationManager configuration, IrcBot ircBot)
 	throws NickAlreadyInUseException, IOException, IrcException, XMPPException {
 		this.configuration = configuration;
-		this.botManager = ircBot;
+		this.ircBot = ircBot;
 		ConnectionConfiguration cconf = 
 			new ConnectionConfiguration(configuration.getKey("XMPPSERVER"),
 					5222,
@@ -56,16 +56,16 @@ public class XMPPBot {
 			String login, String hostname, String message) {
 		if (message.equalsIgnoreCase("time")) {
 			String time = new java.util.Date().toString();
-			botManager.sendMessage(channel, sender + ": The time is now " + time);
+			ircBot.sendMessage(channel, sender + ": The time is now " + time);
 		} else if (message.equalsIgnoreCase("!help")) {
-			botManager.sendMessage(channel, sender + ": I am twibot. " + 
+			ircBot.sendMessage(channel, sender + ": I am twibot. " + 
 			"I log everything that is being said in this channel and post it to twitter.");
 		} else if (message.equalsIgnoreCase("!stop") && sender.startsWith(trustedSender)) {
 			forwardMessages = false;
-			botManager.sendMessage(channel, "Stopped forwarding messages.");
+			ircBot.sendMessage(channel, "Stopped forwarding messages.");
 		} else if (message.equalsIgnoreCase("!start") && sender.startsWith(trustedSender)) { 
 			forwardMessages = true;
-			botManager.sendMessage(channel, "Resumed forwarding messages.");
+			ircBot.sendMessage(channel, "Resumed forwarding messages.");
 		} else {
 			try {
 				if (forwardMessages && !sender.startsWith(trustedSender))
@@ -103,8 +103,8 @@ public class XMPPBot {
 					}
 				} else if (message.getBody().equalsIgnoreCase("USERS")) {
 					try {
-						// NOTE: will break if I add multiple channel funcitonality
-						User[] users = botManager.getUsers(botManager.getChannel());
+						// NOTE: will break if I add support for multiple channels
+						User[] users = ircBot.getUsers(ircBot.getChannel());
 						String userList = "Users in channel: ";
 						for (User u : users) {
 							userList += (u.getNick() + " ");
@@ -115,7 +115,7 @@ public class XMPPBot {
 					}
 				} else if (message.getBody().equalsIgnoreCase("RECONNECT")) { 
 					try {
-						botManager.disconnect();
+						ircBot.disconnect();
 					} catch (Exception e) {
 						e.printStackTrace();
 						try {
@@ -125,7 +125,7 @@ public class XMPPBot {
 						}
 					}
 				} else {
-					botManager.sendMessage(message.getBody());
+					ircBot.sendMessage(message.getBody());
 				}
 			} else {
 				System.err.println("Received message that is hard to understand");

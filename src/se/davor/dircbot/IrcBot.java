@@ -12,16 +12,16 @@ import org.jibble.pircbot.*;
  * @author Davor
  *
  */
-public class BotManager extends PircBot {
+public class IrcBot extends PircBot {
 	protected ConfigurationManager configuration;
-	private XMPPBot bot;
+	private XMPPBot xmppBot;
 	private String channel, encoding;
 
-	public 	BotManager(ConfigurationManager configuration) 
+	public 	IrcBot(ConfigurationManager configuration) 
 			throws NickAlreadyInUseException, IOException, IrcException {
 		this.setName(configuration.getKey("IRCNICK"));
 		this.channel = configuration.getKey("CHANNEL");
-		this.setVersion("twibot 0.1.0");
+		this.setVersion("twibot 0.2.0");
 		this.configuration = configuration;
 		this.encoding = configuration.getKey("ENCODING");
 		setAutoNickChange(true); 
@@ -41,8 +41,8 @@ public class BotManager extends PircBot {
 		return channel;
 	}
 
-	public void addXMPPBot(XMPPBot bot) {
-		this.bot = bot;
+	public void setXMPPBot(XMPPBot bot) {
+		this.xmppBot = bot;
 	}
 
 	protected void onDisconnect() {
@@ -57,12 +57,12 @@ public class BotManager extends PircBot {
 
 	protected void onJoin(String channel, String sender, String login, 
 			String hostname) {
-		bot.onJoin(channel, sender, login, hostname);
+		xmppBot.onJoin(channel, sender, login, hostname);
 	}
 
 	protected void onPart(String channel, String sender,
 			String login, String hostname) {
-		bot.onPart(channel, sender, login, hostname);
+		xmppBot.onPart(channel, sender, login, hostname);
 
 		/* Quick hack: Ideally, I would do this periodically.
 		 * This might have to be placed somewhere else. The
@@ -96,7 +96,7 @@ public class BotManager extends PircBot {
 			String sourceLogin,
 			String sourceHostname,
 			String reason) {
-		bot.onQuit(sourceNick, sourceLogin, sourceHostname, reason);
+		xmppBot.onQuit(sourceNick, sourceLogin, sourceHostname, reason);
 	}
 
 	protected void onPrivateMessage(String sender, String login, 
@@ -107,7 +107,7 @@ public class BotManager extends PircBot {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		bot.onPrivateMessage(sender, login, hostname, message);
+		xmppBot.onPrivateMessage(sender, login, hostname, message);
 	}
 
 	public void sendMessage(String message) {
@@ -122,6 +122,6 @@ public class BotManager extends PircBot {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		bot.onMessage(channel, sender, login, hostname, message);
+		xmppBot.onMessage(channel, sender, login, hostname, message);
 	}
 }
