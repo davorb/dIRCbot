@@ -110,8 +110,6 @@ public class BotManager extends PircBot {
 
 	protected void onMessage(String channel, String sender,
 			String login, String hostname, String message) {
-
-		String m;
 		try {
 			message = new String(message.getBytes(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
