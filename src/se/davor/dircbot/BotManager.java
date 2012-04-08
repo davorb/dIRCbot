@@ -13,24 +13,24 @@ import org.jibble.pircbot.*;
  */
 public class BotManager extends PircBot {
 	protected ConfigurationManager configuration;
-	private ArrayList<Bot> bots;
+	private XMPPBot bot;
 	private String channel;
 
 	public 	BotManager(ConfigurationManager configuration) 
-	throws NickAlreadyInUseException, IOException, IrcException {
+			throws NickAlreadyInUseException, IOException, IrcException {
 		this.setName(configuration.getKey("IRCNICK"));
 		this.channel = configuration.getKey("CHANNEL");
 		this.setVersion("twibot 0.1.0");
 		this.configuration = configuration;
-		this.bots = new ArrayList<Bot>();
 		setAutoNickChange(true); 
 
 		try {
-			setVerbose(Boolean.parseBoolean(configuration.getKey("DEBUG"))); // debugging	
+			setVerbose(Boolean.parseBoolean(configuration.getKey("DEBUG")));
 			connect(configuration.getKey("SERVER"));
 			joinChannel(channel);
 		} catch (NoSuchElementException e) {
-			System.out.println("Missing vital information from configuration file.");
+			System.out.println("Missing vital information " +
+					"from configuration file.");
 			System.exit(1);
 		}
 	}
@@ -39,12 +39,8 @@ public class BotManager extends PircBot {
 		return channel;
 	}
 
-	public void add(Bot bot) {
-		bots.add(bot);
-	}
-
-	public void remove(Bot bot) {
-		bots.remove(bot);
+	public void addXMPPBot(XMPPBot bot) {
+		this.bot = bot;
 	}
 
 	protected void onDisconnect() {
@@ -57,17 +53,14 @@ public class BotManager extends PircBot {
 		}
 	}
 
-	protected void onJoin(String channel, String sender, String login, String hostname) {
-		for (Bot bot : bots) {
-			bot.onJoin(channel, sender, login, hostname);
-		}
+	protected void onJoin(String channel, String sender, String login, 
+			String hostname) {
+		bot.onJoin(channel, sender, login, hostname);
 	}
 
 	protected void onPart(String channel, String sender,
 			String login, String hostname) {
-		for (Bot bot : bots) {
-			bot.onPart(channel, sender, login, hostname);
-		}
+		bot.onPart(channel, sender, login, hostname);
 
 		/* Quick hack: Ideally, I would do this periodically.
 		 * This might have to be placed somewhere else. The
@@ -86,7 +79,7 @@ public class BotManager extends PircBot {
 				e.printStackTrace();
 			}
 		}
-		
+
 		/* Above might not to be working. Adding following
 		 * to be check if it calls onPart when a netsplit
 		 * occurs.
@@ -102,32 +95,20 @@ public class BotManager extends PircBot {
 			String sourceLogin,
 			String sourceHostname,
 			String reason) {
-		for (Bot bot : bots) {
-			bot.onQuit(sourceNick, sourceLogin, sourceHostname, reason);
-		}
+		bot.onQuit(sourceNick, sourceLogin, sourceHostname, reason);
 	}
 
 	protected void onPrivateMessage(String sender, String login, 
 			String hostname, String message) {
-		for (Bot bot : bots) {
-			bot.onPrivateMessage(sender, login, hostname, message);
-		}
+		bot.onPrivateMessage(sender, login, hostname, message);
 	}
 
-	public void sendMessage(String message, Bot senderBot) {
+	public void sendMessage(String message) {
 		super.sendMessage(configuration.getKey("CHANNEL"), message);
-
-		for (Bot bot : bots) {
-			if (!bot.equals(senderBot)) {
-				bot.onMessage(null, this.getNick(), null, null, message);
-			}
-		}
 	}
 
 	protected void onMessage(String channel, String sender,
 			String login, String hostname, String message) {
-		for (Bot bot : bots) {
-			bot.onMessage(channel, sender, login, hostname, message);
-		}
+		bot.onMessage(channel, sender, login, hostname, message);
 	}
 }

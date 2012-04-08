@@ -13,18 +13,18 @@ import org.jivesoftware.smack.packet.Message;
  * Sends incomming IRC messages to a XMPP-account
  * and incomming XMPP messages back to IRC.
  */
-public class XMPPBot extends Bot {
+public class XMPPBot {
 	private XMPPConnection xmppConnection;
-	private BotManager botManager;
 	private Chat chat;
 	private String trustedSender, receiver;
-
+	private ConfigurationManager configuration;
+	private BotManager botManager;
 	private boolean forwardMessages;
 
-	public XMPPBot(ConfigurationManager configuration, BotManager botManager)
+	public XMPPBot(ConfigurationManager configuration, BotManager ircBot)
 	throws NickAlreadyInUseException, IOException, IrcException, XMPPException {
-		super(configuration, botManager);
-
+		this.configuration = configuration;
+		this.botManager = ircBot;
 		ConnectionConfiguration cconf = 
 			new ConnectionConfiguration(configuration.getKey("XMPPSERVER"),
 					5222,
@@ -41,7 +41,6 @@ public class XMPPBot extends Bot {
 		}
 		chat = xmppConnection.getChatManager().createChat(receiver, new MessageParrot());
 		forwardMessages=true;
-		this.botManager = botManager;
 
 		try {
 			trustedSender = configuration.getKey("XMPPTRUSTEDSENDER");
@@ -76,10 +75,6 @@ public class XMPPBot extends Bot {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	private Bot getThis() {
-		return this;
 	}
 
 	/**
@@ -131,28 +126,35 @@ public class XMPPBot extends Bot {
 						}
 					}
 				} else {
-					botManager.sendMessage(message.getBody(), getThis());
+					botManager.sendMessage(message.getBody());
 				}
 			} else {
 				System.err.println("Received message that is hard to understand");
 			}
 		}
 	}
-	@Override
-	protected void onPrivateMessage(String sender, String login,
-			String hostname, String message) {
-		onMessage(null, sender, login, hostname, "[PRIVMSG]"+message);
+
+	public void onPrivateMessage(String sender, String login, String hostname,
+			String message) {
+		try {
+			chat.sendMessage("<"+sender+"> "+message);
+		} catch (XMPPException e) {
+			e.printStackTrace();
+		}
 	}
 
-	@Override
-	protected void onJoin(String channel, String sender, String login,
-			String hostname) { /* do nothing */ }
+	public void onQuit(String sourceNick, String sourceLogin,
+			String sourceHostname, String reason) {
+		// do nothing
+	}
 
-	@Override
-	protected void onPart(String channel, String sender, String login,
-			String hostname) { /* do nothing */ }
+	public void onJoin(String channel, String sender, String login,
+			String hostname) {
+		// do nothing
+	}
 
-	@Override
-	protected void onQuit(String sourceNick, String sourceLogin,
-			String sourceHostname, String reason) { /* do nothing */ }
+	public void onPart(String channel, String sender, String login,
+			String hostname) {
+		// do nothing
+	}
 }
