@@ -101,6 +101,12 @@ public class BotManager extends PircBot {
 
 	protected void onPrivateMessage(String sender, String login, 
 			String hostname, String message) {
+		try {
+			message = new String(message.getBytes(), encoding);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
 		bot.onPrivateMessage(sender, login, hostname, message);
 	}
 
@@ -111,12 +117,11 @@ public class BotManager extends PircBot {
 	protected void onMessage(String channel, String sender,
 			String login, String hostname, String message) {
 		try {
-			message = new String(message.getBytes(), "UTF-8");
+			message = new String(message.getBytes(), encoding);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		System.out.println(message);
 		bot.onMessage(channel, sender, login, hostname, message);
 	}
 }

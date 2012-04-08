@@ -3,85 +3,41 @@ dIRCbot
 
 Introduction
 ------------
-The most important function for this bot is to relay messages from an IRC
-server to a Jabber/XMPP client and vice versa.
+This bot relays messages between IRC and Jabber/XMPP/Gtalk. It will also
+relay private messages.
 
-This is sort of a semi-weird project. It has a bunch of different modules.
-All of them will most likely not fit everybody, but fortunately it's easy
-to disable the ones that you don't need. Essentially this is an IRC-bot
-with the following functionality:
-
-## XMPPBot
-Relays everything that is said in the channel to an 
-XMPP/Jabber/Gtalk-account. Also relays private messages and allows you to
-restart the server remotely (and do a couple of other things as well).
-
-## RemoteFTPLogBot
-Logs everything that is said in the channel and then uploads it to a remote
-FTP-server.
-
-## TwitterBot (has been disabled for now)
-Tweets everything that is said in the channel.
-
-Supports the following options in the config file:
-
-  - XMPPSERVER (true/false) Enables/disables the XMPP-bot. Will default to false if this key doesn't exist. None of the other values are necessary if the module is turned off.
-  
-  - XMPPPORT
-  
-  - XMPPUSER
-  
-  - XMPPPW
-  
-  - XMPPRECEIVER The account to send the messages to
-  
-  - (optional) XMPPTRUSTEDSENDER Ignores messages from this senders who's name starts with this and allows you to send certain commands. If the sender is set to "A" then both "Ab" and "Ac" will fall under this category.
-
-Please note
------------
-The bot is in quite an early stage at this point. The TwitterBot stopped
-working after Twitter changed how they require you to authenticate and I
-will have to get around to fix that eventually.
-
-If you decide to write your own bot, it might be a good idea to keep in
-mind that I haven't added multithreading yet (comming soon!). So if one
-bot is really really slow, it's going to slow down the other bots.
 
 Installation
 ------------
 Create a file called "settings.conf" in the same directory as your jar file.
-These are some of the settings you might want to change:
-
-    xmppbot=true
-    remoteftpbot=true
-    SERVER=se.quakenet.org
-    CHANNEL=#mychannel
-    DEBUG=true
-    XMPPSERVER=talk.google.com
-    XMPPPORT=5222
-    XMPPUSER=mymail@gmail.com
-    IRCNICK=twibot-test
-    FTPHOST=myhost.com
-    FTPUSER=myuser
-    FTPPW=password
-
-To disable one of the bots, like the XMPP-bot or the remote ftp bot, set
-it's options to false or don't write it out in the first place.
+The easiest thing will most likely be if you base in on the 
+settings.conf.example file that can be found in this repository.
 
 After that type this to run the program:
     java -jar dircbot.jar
     
-    
+I suggest that you run this program with [screen](http://www.debian-administration.org/articles/34).
+
+Configuration
+------------
+Use settings.conf.example as a base for a new example file. The example file
+needs to be placed in the same folder as the jar-file.
+
+Most of the settings are self-explanatory except perhaps the optional option
+XMPPTRUSTEDSENDER. This option is basically tells dIRCbot to ignore all users
+that have this prefix in their nickname.
+
+So lets say that you set the option to "al" and have three users in an IRC
+channel named "al-2", "al" and "bob". dIRCbot will now only relay messages
+from the user bob.
+
 Required libraries
 ------------------
 The following libraries are required to be able to compile the source code:
 
-  - log4j
-  - edtFTPj
   - pircbot
   - smack
-  - twitter4j
 
 Contact
 -------
-If there's anything else, feed free to contact me @ davor @ davor.se
+If there's anything else, feed free to contact me at davor@davor.se
