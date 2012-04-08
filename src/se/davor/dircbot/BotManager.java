@@ -1,6 +1,7 @@
 package se.davor.dircbot;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
@@ -14,7 +15,7 @@ import org.jibble.pircbot.*;
 public class BotManager extends PircBot {
 	protected ConfigurationManager configuration;
 	private XMPPBot bot;
-	private String channel;
+	private String channel, encoding;
 
 	public 	BotManager(ConfigurationManager configuration) 
 			throws NickAlreadyInUseException, IOException, IrcException {
@@ -22,6 +23,7 @@ public class BotManager extends PircBot {
 		this.channel = configuration.getKey("CHANNEL");
 		this.setVersion("twibot 0.1.0");
 		this.configuration = configuration;
+		this.encoding = configuration.getKey("ENCODING");
 		setAutoNickChange(true); 
 
 		try {
@@ -108,6 +110,15 @@ public class BotManager extends PircBot {
 
 	protected void onMessage(String channel, String sender,
 			String login, String hostname, String message) {
+
+		String m;
+		try {
+			message = new String(message.getBytes(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		System.out.println(message);
 		bot.onMessage(channel, sender, login, hostname, message);
 	}
 }
