@@ -84,8 +84,7 @@ public class XMPPBot {
 		private Message msg;
 
 		MessageParrot() {
-			// TODO: Need to add this to config file
-			msg = new Message("davor@davor.se", Message.Type.chat);
+			msg = new Message(receiver, Message.Type.chat);
 		}
 
 		public void processMessage(Chat chat, Message message) {

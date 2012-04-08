@@ -75,7 +75,6 @@ public class BotManager extends PircBot {
 				Thread.sleep(1000);
 				reconnect();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
