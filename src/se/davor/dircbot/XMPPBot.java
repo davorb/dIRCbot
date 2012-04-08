@@ -6,12 +6,16 @@ import java.util.NoSuchElementException;
 import org.jibble.pircbot.IrcException;
 import org.jibble.pircbot.NickAlreadyInUseException;
 import org.jibble.pircbot.User;
-import org.jivesoftware.smack.*;
+import org.jivesoftware.smack.Chat;
+import org.jivesoftware.smack.ConnectionConfiguration;
+import org.jivesoftware.smack.MessageListener;
+import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 
 /***
- * Sends incomming IRC messages to a XMPP-account
- * and incomming XMPP messages back to IRC.
+ * Sends incomming IRC messages to a XMPP-account and incomming XMPP messages
+ * back to IRC.
  */
 public class XMPPBot {
 	private XMPPConnection xmppConnection;
@@ -22,25 +26,26 @@ public class XMPPBot {
 	private boolean forwardMessages;
 
 	public XMPPBot(ConfigurationManager configuration, IrcBot ircBot)
-	throws NickAlreadyInUseException, IOException, IrcException, XMPPException {
+			throws NickAlreadyInUseException, IOException, IrcException,
+			XMPPException {
 		this.configuration = configuration;
 		this.ircBot = ircBot;
-		ConnectionConfiguration cconf = 
-			new ConnectionConfiguration(configuration.getKey("XMPPSERVER"),
-					5222,
-			"googlemail.com");
+		ConnectionConfiguration cconf = new ConnectionConfiguration(
+				configuration.getKey("XMPPSERVER"), 5222, "googlemail.com");
 		xmppConnection = new XMPPConnection(cconf);
 		xmppConnection.connect();
-		try{
-			xmppConnection.login(configuration.getKey("XMPPUSER"), 
+		try {
+			xmppConnection.login(configuration.getKey("XMPPUSER"),
 					configuration.getKey("XMPPPW"));
 			receiver = configuration.getKey("XMPPRECEIVER");
 		} catch (NoSuchElementException e) {
-			System.err.println("Missing vital information from configuration file.");
+			System.err
+					.println("Missing vital information from configuration file.");
 			System.exit(1);
 		}
-		chat = xmppConnection.getChatManager().createChat(receiver, new MessageParrot());
-		forwardMessages=true;
+		chat = xmppConnection.getChatManager().createChat(receiver,
+				new MessageParrot());
+		forwardMessages = true;
 
 		try {
 			trustedSender = configuration.getKey("XMPPTRUSTEDSENDER");
@@ -52,24 +57,27 @@ public class XMPPBot {
 	/**
 	 * When receiving IRC-message
 	 */
-	protected void onMessage(String channel, String sender,
-			String login, String hostname, String message) {
+	protected void onMessage(String channel, String sender, String login,
+			String hostname, String message) {
 		if (message.equalsIgnoreCase("time")) {
-			String time = new java.util.Date().toString();
-			ircBot.sendMessage(channel, sender + ": The time is now " + time);
+			ircBot.sendMessage(channel, sender + ": The time is now "
+					+ new java.util.Date().toString());
 		} else if (message.equalsIgnoreCase("!help")) {
-			ircBot.sendMessage(channel, sender + ": I am twibot. " + 
-			"I log everything that is being said in this channel and post it to twitter.");
-		} else if (message.equalsIgnoreCase("!stop") && sender.startsWith(trustedSender)) {
+			ircBot.sendMessage(channel, sender + ": I am twibot. "
+					+ "I log everything that is being said in this "
+					+ "channel and post it to twitter.");
+		} else if (message.equalsIgnoreCase("!stop")
+				&& sender.startsWith(trustedSender)) {
 			forwardMessages = false;
 			ircBot.sendMessage(channel, "Stopped forwarding messages.");
-		} else if (message.equalsIgnoreCase("!start") && sender.startsWith(trustedSender)) { 
+		} else if (message.equalsIgnoreCase("!start")
+				&& sender.startsWith(trustedSender)) {
 			forwardMessages = true;
 			ircBot.sendMessage(channel, "Resumed forwarding messages.");
 		} else {
 			try {
 				if (forwardMessages && !sender.startsWith(trustedSender))
-					chat.sendMessage("<"+sender+"> "+message);
+					chat.sendMessage("<" + sender + "> " + message);
 			} catch (Exception e) {
 				System.err.println("Unable to send XMPP message.");
 				e.printStackTrace();
@@ -88,22 +96,26 @@ public class XMPPBot {
 		}
 
 		public void processMessage(Chat chat, Message message) {
-			if(message.getType().equals(Message.Type.chat) && message.getBody() != null) {
+			if (message.getType().equals(Message.Type.chat)
+					&& message.getBody() != null) {
 				System.out.println("Received: " + message.getBody());
 				if (message.getBody().equalsIgnoreCase("STOP")) {
-					forwardMessages=false;
+					forwardMessages = false;
 				} else if (message.getBody().equalsIgnoreCase("START")) {
-					forwardMessages=true;
+					forwardMessages = true;
 				} else if (message.getBody().equalsIgnoreCase("STATUS")) {
 					try {
-						chat.sendMessage("Commands are 'USERS', 'RECONNECT', 'START' and 'STOP'."+
-								"Forwarding is set to "+forwardMessages+".");
+						chat.sendMessage("Commands are 'USERS', 'RECONNECT', 'START' and 'STOP'."
+								+ "Forwarding is set to "
+								+ forwardMessages
+								+ ".");
 					} catch (XMPPException e) {
 						System.err.println("Failed to send xmpp message");
 					}
 				} else if (message.getBody().equalsIgnoreCase("USERS")) {
 					try {
-						// NOTE: will break if I add support for multiple channels
+						// NOTE: will break if I add support for multiple
+						// channels
 						User[] users = ircBot.getUsers(ircBot.getChannel());
 						String userList = "Users in channel: ";
 						for (User u : users) {
@@ -113,7 +125,7 @@ public class XMPPBot {
 					} catch (XMPPException e) {
 						System.err.println("Failed to send xmpp message");
 					}
-				} else if (message.getBody().equalsIgnoreCase("RECONNECT")) { 
+				} else if (message.getBody().equalsIgnoreCase("RECONNECT")) {
 					try {
 						ircBot.disconnect();
 					} catch (Exception e) {
@@ -128,7 +140,8 @@ public class XMPPBot {
 					ircBot.sendMessage(message.getBody());
 				}
 			} else {
-				System.err.println("Received message that is hard to understand");
+				System.err
+						.println("Received message that is hard to understand");
 			}
 		}
 	}
@@ -136,7 +149,7 @@ public class XMPPBot {
 	public void onPrivateMessage(String sender, String login, String hostname,
 			String message) {
 		try {
-			chat.sendMessage("<"+sender+"> "+message);
+			chat.sendMessage("<" + sender + "> " + message);
 		} catch (XMPPException e) {
 			e.printStackTrace();
 		}

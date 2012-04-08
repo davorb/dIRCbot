@@ -6,11 +6,11 @@ import java.util.NoSuchElementException;
 import java.util.Properties;
 
 public class ConfigurationManager {
-	Properties properties;
+	private Properties properties;
 
 	ConfigurationManager(String fileName) throws IOException {
 		properties = new Properties();
-		FileInputStream fis = new FileInputStream(fileName);
+		final FileInputStream fis = new FileInputStream(fileName);
 		properties.load(fis);
 		fis.close();
 	}
@@ -20,10 +20,11 @@ public class ConfigurationManager {
 	}
 
 	public String getKey(String key) throws NoSuchElementException {
-		if (properties.containsKey(key))
+		if (properties.containsKey(key)) {
 			return properties.getProperty(key);
-		else
+		} else {
 			throw new NoSuchElementException();
+		}
 	}
 	
 	/**
@@ -33,8 +34,7 @@ public class ConfigurationManager {
 	 */
 	public boolean isTrue(String key) {
 		try {
-			boolean b = new Boolean(getKey(key));
-			return b;
+			return Boolean.parseBoolean(getKey(key));
 		} catch (NoSuchElementException e) {
 			return false;
 		}

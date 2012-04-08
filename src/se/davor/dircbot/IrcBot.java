@@ -31,7 +31,7 @@ public class IrcBot extends PircBot {
 			connect(configuration.getKey("SERVER"));
 			joinChannel(channel);
 		} catch (NoSuchElementException e) {
-			System.out.println("Missing vital information " +
+			System.err.println("Missing vital information " +
 					"from configuration file.");
 			System.exit(1);
 		}
