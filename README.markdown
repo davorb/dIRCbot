@@ -33,6 +33,9 @@ So lets say that you set the option to "al" and have three users in an IRC
 channel named "al-2", "al" and "bob". dIRCbot will now only relay messages
 from the user bob.
 
+A list of supported encodings can be found 
+[here](http://docs.oracle.com/javase/1.4.2/docs/guide/intl/encoding.doc.html).
+
 Required libraries
 ------------------
 The following libraries are required to be able to compile the source code:
