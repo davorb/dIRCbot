@@ -1,0 +1,11 @@
+SERVER=dk.quakenet.org
+CHANNEL=#mychannel
+DEBUG=true
+XMPPSERVER=talk.google.com
+XMPPORT=5222
+XMPPUSER=xmppuser@gmail.com
+XMPPPW=password
+XMPPTRUSTEDSENDER=irc-nick-my.other.irc.nicks.starts.with
+XMPPRECEIVER=xmpp.address.to.send@messages.to
+IRCNICK=irc-nick
+ENCODING=ISO-8859-1
